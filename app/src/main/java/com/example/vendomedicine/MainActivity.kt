@@ -1,5 +1,6 @@
 package com.example.vendomedicine
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -8,11 +9,9 @@ import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
-    private var quantity1 = 0
-    private var quantity2 = 0
-    private var quantity3 = 0
-    private var quantity4 = 0
+    private val maxQuantity = 4  // Set the maximum quantity here
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -29,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         val quantityTextView4: TextView = findViewById(R.id.quantityTextView4)
 
         cancelButton.setOnClickListener {
-            // Handle cancel button click
+            resetQuantities(quantityTextView1, quantityTextView2, quantityTextView3, quantityTextView4)
         }
 
         proceedButton.setOnClickListener {
@@ -38,26 +37,32 @@ class MainActivity : AppCompatActivity() {
         }
 
         floatingActionButton1.setOnClickListener {
-            updateQuantity(quantityTextView1, 1)
+            setQuantityToMax(quantityTextView1)
         }
 
         floatingActionButton2.setOnClickListener {
-            updateQuantity(quantityTextView2, 1)
+            setQuantityToMax(quantityTextView2)
         }
 
         floatingActionButton3.setOnClickListener {
-            updateQuantity(quantityTextView3, 1)
+            setQuantityToMax(quantityTextView3)
         }
 
         floatingActionButton4.setOnClickListener {
-            updateQuantity(quantityTextView4, 1)
+            setQuantityToMax(quantityTextView4)
         }
     }
 
-    private fun updateQuantity(textView: TextView, change: Int) {
-        var quantity = textView.text.toString().toInt()
-        quantity += change
-        if (quantity < 0) quantity = 0
-        textView.text = quantity.toString()
+    private fun setQuantityToMax(textView: TextView) {
+        val currentQuantity = textView.text.toString().toInt()
+        if (currentQuantity < maxQuantity) {
+            textView.text = maxQuantity.toString()
+        }
+    }
+
+    private fun resetQuantities(vararg textViews: TextView) {
+        for (textView in textViews) {
+            textView.text = "0"
+        }
     }
 }
