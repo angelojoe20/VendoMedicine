@@ -10,7 +10,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="200dp"
+        android:layout_width="20dp"
         android:layout_height="50dp"
         android:autoText="true"
         android:fontFamily="@font/archivo_black"
