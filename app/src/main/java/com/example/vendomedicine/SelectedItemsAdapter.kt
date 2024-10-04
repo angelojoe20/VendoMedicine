@@ -23,7 +23,7 @@ class SelectedItemsAdapter(private val items: List<SelectedItem>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         holder.itemName.text = item.name
-        holder.itemQuantity.text = item.quantity.toString()
+        holder.itemQuantity.text = "Quantity: ${item.quantity}"
     }
 
     override fun getItemCount() = items.size

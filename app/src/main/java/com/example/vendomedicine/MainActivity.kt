@@ -2,18 +2,36 @@ package com.example.vendomedicine
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.widget.Button
-import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
     private val maxQuantity = 4
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SelectedItemsAdapter
     private val selectedItems = mutableListOf<SelectedItem>()
+
+    private val productPrices = mapOf(
+        "Ibuprofen" to 17.0,
+        "Paracetamol" to 6.0,
+        "Loperamide" to 10.0,
+        "Cetirizine" to 15.0
+    )
+
+    private lateinit var ibuprofenButton: Button
+    private lateinit var paracetamolButton: Button
+    private lateinit var loperamideButton: Button
+    private lateinit var cetirizineButton: Button
+    private lateinit var imageView: ImageView
+
+    private val defaultButtonColor = Color.parseColor("#e4b3e1")
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,57 +40,88 @@ class MainActivity : AppCompatActivity() {
 
         val cancelButton: Button = findViewById(R.id.button)
         val proceedButton: Button = findViewById(R.id.button2)
-        val ibuprofenButton: Button = findViewById(R.id.button5)
-        val paracetamolButton: Button = findViewById(R.id.button8)
-        val loperamideButton: Button = findViewById(R.id.button7)
-        val cetirizineButton: Button = findViewById(R.id.button6)
-        val quantityTextView1: TextView = findViewById(R.id.quantityTextView1)
-        val quantityTextView2: TextView = findViewById(R.id.quantityTextView2)
-        val quantityTextView3: TextView = findViewById(R.id.quantityTextView3)
-        val quantityTextView4: TextView = findViewById(R.id.quantityTextView4)
+        ibuprofenButton = findViewById(R.id.button5)
+        paracetamolButton = findViewById(R.id.button8)
+        loperamideButton = findViewById(R.id.button7)
+        cetirizineButton = findViewById(R.id.button6)
+
+        imageView = findViewById(R.id.imageView)
 
         recyclerView = findViewById(R.id.recyclerView)
-        adapter = SelectedItemsAdapter(selectedItems)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        setupRecyclerView()
 
         cancelButton.setOnClickListener {
-            resetQuantities(quantityTextView1, quantityTextView2, quantityTextView3, quantityTextView4)
+            resetQuantities()
+            resetButtonColors()
+            imageView.setImageResource(0)
         }
 
         proceedButton.setOnClickListener {
+            if (selectedItems.isEmpty()) {
+                showNoOrderNotification()
+                return@setOnClickListener
+            }
+
+            var totalAmount = 0.0
+            for (item in selectedItems) {
+                val pricePerUnit = productPrices[item.name] ?: 0.0
+                totalAmount += item.quantity * pricePerUnit
+            }
+
             val intent = Intent(this, ProcessPayment::class.java)
+            intent.putParcelableArrayListExtra("SELECTED_ITEMS", ArrayList(selectedItems))
+            intent.putExtra("TOTAL_AMOUNT", totalAmount.toString())
             startActivity(intent)
         }
 
-        ibuprofenButton.setOnClickListener {
-            setQuantityToMax(quantityTextView1, "Ibuprofen")
-        }
-
-        paracetamolButton.setOnClickListener {
-            setQuantityToMax(quantityTextView2, "Paracetamol")
-        }
-
-        loperamideButton.setOnClickListener {
-            setQuantityToMax(quantityTextView3, "Loperamide")
-        }
-
-        cetirizineButton.setOnClickListener {
-            setQuantityToMax(quantityTextView4, "Cetirizine")
-        }
+        ibuprofenButton.setOnClickListener { handleButtonClick(ibuprofenButton, "Ibuprofen") }
+        paracetamolButton.setOnClickListener { handleButtonClick(paracetamolButton, "Paracetamol") }
+        loperamideButton.setOnClickListener { handleButtonClick(loperamideButton, "Loperamide") }
+        cetirizineButton.setOnClickListener { handleButtonClick(cetirizineButton, "Cetirizine") }
     }
 
-    private fun setQuantityToMax(textView: TextView, itemName: String) {
-        textView.text = maxQuantity.toString()
-        selectedItems.add(SelectedItem(itemName, maxQuantity))
+    private fun setupRecyclerView() {
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = SelectedItemsAdapter(selectedItems)
+        recyclerView.adapter = adapter
+    }
+
+    private fun handleButtonClick(button: Button, itemName: String) {
+        val existingItem = selectedItems.find { it.name == itemName }
+        if (existingItem == null) {
+            selectedItems.add(SelectedItem(itemName, maxQuantity))
+        } else {
+            existingItem.quantity = maxQuantity // Update quantity if already added
+        }
+
+        button.setBackgroundColor(Color.GREEN)
+        when (itemName) {
+            "Ibuprofen" -> imageView.setImageResource(R.drawable.iprubofen)
+            "Paracetamol" -> imageView.setImageResource(R.drawable.paracetamol)
+            "Loperamide" -> imageView.setImageResource(R.drawable.loperamide)
+            "Cetirizine" -> imageView.setImageResource(R.drawable.cetirizine)
+        }
+
+        button.postDelayed({
+            button.setBackgroundColor(defaultButtonColor)
+        }, 100)
+
         adapter.notifyDataSetChanged()
     }
 
-    private fun resetQuantities(vararg textViews: TextView) {
-        for (textView in textViews) {
-            textView.text = "0"
-        }
+    private fun resetQuantities() {
         selectedItems.clear()
         adapter.notifyDataSetChanged()
+    }
+
+    private fun resetButtonColors() {
+        ibuprofenButton.setBackgroundColor(defaultButtonColor)
+        paracetamolButton.setBackgroundColor(defaultButtonColor)
+        loperamideButton.setBackgroundColor(defaultButtonColor)
+        cetirizineButton.setBackgroundColor(defaultButtonColor)
+    }
+
+    private fun showNoOrderNotification() {
+        Toast.makeText(this, "No orders selected!", Toast.LENGTH_SHORT).show()
     }
 }

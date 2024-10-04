@@ -12,24 +12,24 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="0dp"
+        android:layout_width="284dp"
         android:layout_height="70dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="56dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="53dp"
+        android:layout_marginBottom="50dp"
         android:autoText="true"
         android:fontFamily="@font/archivo_black"
         android:text="VendoMed"
+        android:textColor="#000000"
         android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="0dp"
         android:layout_marginStart="66dp"
         android:layout_marginEnd="49dp"
         android:background="#E91E63"
@@ -37,14 +37,16 @@
         android:fontFamily="@font/inter_semibold"
         android:text="CANCEL"
         android:textColor="#FFFFFF"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button2"
+        app:layout_constraintBottom_toBottomOf="@+id/button2"
         app:layout_constraintEnd_toStartOf="@+id/button2"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button2" />
 
     <Button
         android:id="@+id/button2"
         android:layout_width="0dp"
         android:layout_height="60dp"
+        android:layout_marginTop="39dp"
         android:layout_marginEnd="56dp"
         android:layout_marginBottom="48dp"
         android:background="#8240B1"
@@ -54,16 +56,17 @@
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button" />
+        app:layout_constraintStart_toEndOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/quantityTextView3" />
 
     <Button
         android:id="@+id/button5"
-        android:layout_width="150dp"
+        android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="372dp"
         android:layout_marginEnd="42dp"
-        android:text="Ibuprofen - ₱10"
+        android:text="Ibuprofen - ₱17"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -71,82 +74,88 @@
     <Button
         android:id="@+id/button6"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="80dp"
         android:layout_marginEnd="33dp"
-        android:text="Cetirizine - ₱10"
-        app:layout_constraintBottom_toBottomOf="@+id/button5"
+        android:text="Cetirizine - ₱15"
+        app:layout_constraintBaseline_toBaselineOf="@+id/button5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button5"
-        app:layout_constraintTop_toTopOf="@+id/button5"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toEndOf="@+id/button5" />
 
     <TextView
         android:id="@+id/quantityTextView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="107dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="107dp"
         android:text="0"
+        android:textColor="#000000"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/quantityTextView2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/quantityTextView2"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/button6"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button5" />
 
     <TextView
         android:id="@+id/quantityTextView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="69dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="69dp"
         android:text="0"
+        android:textColor="#000000"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/quantityTextView3"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/quantityTextView3"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/button7"
+        app:layout_constraintStart_toStartOf="@+id/button6"
         app:layout_constraintTop_toBottomOf="@+id/button6" />
 
     <Button
         android:id="@+id/button8"
-        android:layout_width="150dp"
+        android:layout_width="0dp"
         android:layout_height="80dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="108dp"
         android:layout_marginEnd="42dp"
-        android:layout_marginBottom="64dp"
-        android:text="Paracetamol - ₱10"
-        app:layout_constraintBottom_toBottomOf="@+id/quantityTextView2"
+        android:layout_marginBottom="109dp"
+        android:text="Paracetamol - ₱7"
+        app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toStartOf="@+id/button7"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quantityTextView1" />
+        app:layout_constraintTop_toBottomOf="@+id/button5" />
 
     <TextView
         android:id="@+id/quantityTextView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginBottom="147dp"
         android:text="0"
+        android:textColor="#000000"
         android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/button7"
-        app:layout_constraintHorizontal_bias="0.482"
-        app:layout_constraintStart_toStartOf="@+id/button7"
-        app:layout_constraintTop_toBottomOf="@+id/button7" />
+        app:layout_constraintStart_toStartOf="@+id/button7" />
 
     <TextView
         android:id="@+id/quantityTextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="41dp"
+        android:layout_marginTop="35dp"
         android:text="0"
+        android:textColor="#000000"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/button8"
-        app:layout_constraintHorizontal_bias="0.54"
-        app:layout_constraintStart_toStartOf="@+id/button8"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/button"
         app:layout_constraintTop_toBottomOf="@+id/button8" />
 
     <Button
         android:id="@+id/button7"
-        android:layout_width="154dp"
+        android:layout_width="0dp"
         android:layout_height="78dp"
-        android:layout_marginEnd="33dp"
+        android:layout_marginEnd="31dp"
         android:text="Loperamide - ₱10"
         app:layout_constraintBaseline_toBaselineOf="@+id/button8"
         app:layout_constraintEnd_toEndOf="parent"
@@ -154,16 +163,31 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="150dp"
+        android:layout_width="210dp"
         android:layout_height="160dp"
-        android:layout_marginTop="36dp"
-        android:background="#DDDEE7"
+        android:layout_marginTop="166dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="160dp"
+        android:background="#F4ECEC"
         android:backgroundTintMode="add"
         android:textAlignment="center"
         android:textDirection="anyRtl"
+        app:layout_constraintBottom_toBottomOf="@+id/button6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.881"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="35dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
+        app:layout_constraintEnd_toStartOf="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toTopOf="@+id/recyclerView"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
