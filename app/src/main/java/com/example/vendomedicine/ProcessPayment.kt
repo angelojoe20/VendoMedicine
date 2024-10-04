@@ -25,10 +25,9 @@ class ProcessPayment : AppCompatActivity() {
         // Find TextView in process_payment.xml
         val amountTextView: TextView = findViewById(R.id.textView3)
 
-        // Set the retrieved values into the TextView for total amount
-        amountTextView.text = "AMOUNT: ₱$totalAmount" // Format to show peso sign
 
-        // Setup RecyclerView
+        amountTextView.text = "AMOUNT: ₱$totalAmount"
+
         recyclerView = findViewById(R.id.recyclerView2)
         setupRecyclerView(recyclerView, selectedItems)
 
