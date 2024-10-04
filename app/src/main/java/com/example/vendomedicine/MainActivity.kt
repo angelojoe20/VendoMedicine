@@ -31,6 +31,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cetirizineButton: Button
     private lateinit var imageView: ImageView
 
+    private lateinit var ibuprofenQuantityTextView: TextView
+    private lateinit var paracetamolQuantityTextView: TextView
+    private lateinit var loperamideQuantityTextView: TextView
+    private lateinit var cetirizineQuantityTextView: TextView
+
     private val defaultButtonColor = Color.parseColor("#e4b3e1")
 
     @SuppressLint("MissingInflatedId")
@@ -46,6 +51,12 @@ class MainActivity : AppCompatActivity() {
         cetirizineButton = findViewById(R.id.button6)
 
         imageView = findViewById(R.id.imageView)
+
+        // Initialize quantity TextViews
+        ibuprofenQuantityTextView = findViewById(R.id.quantityTextView1)
+        paracetamolQuantityTextView = findViewById(R.id.quantityTextView2)
+        loperamideQuantityTextView = findViewById(R.id.quantityTextView3)
+        cetirizineQuantityTextView = findViewById(R.id.quantityTextView4)
 
         recyclerView = findViewById(R.id.recyclerView)
         setupRecyclerView()
@@ -74,10 +85,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        ibuprofenButton.setOnClickListener { handleButtonClick(ibuprofenButton, "Ibuprofen") }
-        paracetamolButton.setOnClickListener { handleButtonClick(paracetamolButton, "Paracetamol") }
-        loperamideButton.setOnClickListener { handleButtonClick(loperamideButton, "Loperamide") }
-        cetirizineButton.setOnClickListener { handleButtonClick(cetirizineButton, "Cetirizine") }
+        ibuprofenButton.setOnClickListener { handleButtonClick(ibuprofenButton, "Ibuprofen", ibuprofenQuantityTextView) }
+        paracetamolButton.setOnClickListener { handleButtonClick(paracetamolButton, "Paracetamol", paracetamolQuantityTextView) }
+        loperamideButton.setOnClickListener { handleButtonClick(loperamideButton, "Loperamide", loperamideQuantityTextView) }
+        cetirizineButton.setOnClickListener { handleButtonClick(cetirizineButton, "Cetirizine", cetirizineQuantityTextView) }
     }
 
     private fun setupRecyclerView() {
@@ -86,13 +97,18 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
-    private fun handleButtonClick(button: Button, itemName: String) {
+    private fun handleButtonClick(button: Button, itemName: String, quantityTextView: TextView) {
         val existingItem = selectedItems.find { it.name == itemName }
+        val newQuantity = maxQuantity // Set quantity directly to max
+
         if (existingItem == null) {
-            selectedItems.add(SelectedItem(itemName, maxQuantity))
+            selectedItems.add(SelectedItem(itemName, newQuantity)) // Add item with max quantity
         } else {
-            existingItem.quantity = maxQuantity // Update quantity if already added
+            existingItem.quantity = newQuantity // Set existing item to max quantity
         }
+
+        // Update the quantity TextView
+        quantityTextView.text = newQuantity.toString()
 
         button.setBackgroundColor(Color.GREEN)
         when (itemName) {
@@ -111,6 +127,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun resetQuantities() {
         selectedItems.clear()
+        ibuprofenQuantityTextView.text = "0"
+        paracetamolQuantityTextView.text = "0"
+        loperamideQuantityTextView.text = "0"
+        cetirizineQuantityTextView.text = "0"
         adapter.notifyDataSetChanged()
     }
 
