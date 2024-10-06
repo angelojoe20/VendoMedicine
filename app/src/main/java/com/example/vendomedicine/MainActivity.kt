@@ -187,6 +187,8 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "No orders selected!", Toast.LENGTH_SHORT).show()
     }
 
+ ///////////////////////////////////BLUETOOTH INITIALIZATION/////////////////////////////////////////////////////
+
     private fun initializeBluetooth() {
         if (bluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth is not supported on this device", Toast.LENGTH_SHORT).show()
