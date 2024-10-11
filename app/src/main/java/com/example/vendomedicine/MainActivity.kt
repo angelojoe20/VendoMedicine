@@ -187,101 +187,98 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton("OK", null)
             .show()
     }
-
 }
 
- ///////////////////////////////////BLUETOOTH INITIALIZATION/////////////////////////////////////////////////////
+///////////////////////////////////BLUETOOTH INITIALIZATION/////////////////////////////////////////////////////
 
-    /*private fun initializeBluetooth() {
-        if (bluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not supported on this device", Toast.LENGTH_SHORT).show()
-            return
+/*private fun initializeBluetooth() {
+    if (bluetoothAdapter == null) {
+        Toast.makeText(this, "Bluetooth is not supported on this device", Toast.LENGTH_SHORT).show()
+        return
+    }
+
+    if (!bluetoothAdapter.isEnabled) {
+        val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+        startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+    } else {
+        // Bluetooth is enabled, show connection prompt
+        showBluetoothConnectionPrompt()
+    }
+}
+
+private fun showBluetoothConnectionPrompt() {
+    val pairedDevices = bluetoothAdapter?.bondedDevices
+    val deviceNames = pairedDevices?.map { it.name }?.toTypedArray()
+
+    AlertDialog.Builder(this)
+        .setTitle("Connect to ESP32")
+        .setItems(deviceNames) { dialog: DialogInterface, which: Int ->
+            val device = pairedDevices?.elementAt(which)
+            device?.let {
+                connectToDevice(it)
+            }
         }
+        .setNegativeButton("Cancel") { dialog: DialogInterface, _: Int -> dialog.dismiss() }
+        .setCancelable(false)
+        .show()
+}
 
-        if (!bluetoothAdapter.isEnabled) {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+private fun connectToDevice(device: BluetoothDevice) {
+    bluetoothGatt = device.connectGatt(this, false, gattCallback)
+}
+
+private val gattCallback = object : BluetoothGattCallback() {
+    override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
+        super.onConnectionStateChange(gatt, status, newState)
+        if (newState == BluetoothProfile.STATE_CONNECTED) {
+            Log.i("Bluetooth", "Connected to GATT server.")
+            bluetoothGatt?.discoverServices()
+        } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+            Log.i("Bluetooth", "Disconnected from GATT server.")
+        }
+    }
+
+    override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+        super.onServicesDiscovered(gatt, status)
+        if (status == BluetoothGatt.GATT_SUCCESS) {
+            characteristic = gatt.getService(SERVICE_UUID)?.getCharacteristic(CHARACTERISTIC_UUID)
+        }
+    }
+}
+
+private fun checkBluetoothPermissions() {
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
+        ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN), REQUEST_LOCATION_PERMISSION)
+    } else {
+        initializeBluetooth()
+    }
+}
+
+private fun sendDataToESP32(data: String) {
+    characteristic?.let {
+        it.value = data.toByteArray()
+        val success = bluetoothGatt?.writeCharacteristic(it) ?: false
+        if (success) {
+            Log.i("Bluetooth", "Data sent: $data")
+            Toast.makeText(this, "Data sent: $data", Toast.LENGTH_SHORT).show() // Debug message
         } else {
-            // Bluetooth is enabled, show connection prompt
-            showBluetoothConnectionPrompt()
+            Log.e("Bluetooth", "Failed to send data: $data")
+            Toast.makeText(this, "Failed to send data: $data", Toast.LENGTH_SHORT).show() // Error message
         }
+    } ?: run {
+        Log.e("Bluetooth", "Characteristic is null, cannot send data.")
+        Toast.makeText(this, "Characteristic is null, cannot send data.", Toast.LENGTH_SHORT).show() // Error message
     }
+}
 
-    private fun showBluetoothConnectionPrompt() {
-        val pairedDevices = bluetoothAdapter?.bondedDevices
-        val deviceNames = pairedDevices?.map { it.name }?.toTypedArray()
-
-        AlertDialog.Builder(this)
-            .setTitle("Connect to ESP32")
-            .setItems(deviceNames) { dialog: DialogInterface, which: Int ->
-                val device = pairedDevices?.elementAt(which)
-                device?.let {
-                    connectToDevice(it)
-                }
-            }
-            .setNegativeButton("Cancel") { dialog: DialogInterface, _: Int -> dialog.dismiss() }
-            .setCancelable(false)
-            .show()
-    }
-
-    private fun connectToDevice(device: BluetoothDevice) {
-        bluetoothGatt = device.connectGatt(this, false, gattCallback)
-    }
-
-    private val gattCallback = object : BluetoothGattCallback() {
-        override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
-            super.onConnectionStateChange(gatt, status, newState)
-            if (newState == BluetoothProfile.STATE_CONNECTED) {
-                Log.i("Bluetooth", "Connected to GATT server.")
-                bluetoothGatt?.discoverServices()
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                Log.i("Bluetooth", "Disconnected from GATT server.")
-            }
-        }
-
-        override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
-            super.onServicesDiscovered(gatt, status)
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                characteristic = gatt.getService(SERVICE_UUID)?.getCharacteristic(CHARACTERISTIC_UUID)
-            }
-        }
-    }
-
-    private fun checkBluetoothPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN), REQUEST_LOCATION_PERMISSION)
-        } else {
+override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    if (requestCode == REQUEST_LOCATION_PERMISSION) {
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             initializeBluetooth()
-        }
-    }
-
-    private fun sendDataToESP32(data: String) {
-        characteristic?.let {
-            it.value = data.toByteArray()
-            val success = bluetoothGatt?.writeCharacteristic(it) ?: false
-            if (success) {
-                Log.i("Bluetooth", "Data sent: $data")
-                Toast.makeText(this, "Data sent: $data", Toast.LENGTH_SHORT).show() // Debug message
-            } else {
-                Log.e("Bluetooth", "Failed to send data: $data")
-                Toast.makeText(this, "Failed to send data: $data", Toast.LENGTH_SHORT).show() // Error message
-            }
-        } ?: run {
-            Log.e("Bluetooth", "Characteristic is null, cannot send data.")
-            Toast.makeText(this, "Characteristic is null, cannot send data.", Toast.LENGTH_SHORT).show() // Error message
-        }
-    }
-
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                initializeBluetooth()
-            } else {
-                Toast.makeText(this, "Bluetooth permissions are required to proceed", Toast.LENGTH_SHORT).show()
-            }
+        } else {
+            Toast.makeText(this, "Bluetooth permissions are required to proceed", Toast.LENGTH_SHORT).show()
         }
     }
 }
