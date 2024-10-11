@@ -7,15 +7,13 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="38dp"
-        android:layout_marginTop="254dp"
-        android:layout_marginEnd="38dp"
-        android:layout_marginBottom="145dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:layout_marginBottom="98dp"
         android:text="VendoMed"
         android:textAlignment="center"
-        android:textSize="60sp"
+        android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView5"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,26 +22,55 @@
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="150dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="69dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="112dp"
         android:text="Please Tap your ID"
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/imageView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="200dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="174dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="73dp"
+        app:layout_constraintBottom_toTopOf="@+id/rfidInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
-        app:srcCompat="@android:drawable/arrow_down_float"
+        app:srcCompat="@drawable/arrow_free_down"
         tools:srcCompat="@drawable/arrow_free_down" />
+
+    <EditText
+        android:id="@+id/rfidInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="45dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:minHeight="48dp"
+        android:text="INPUT CARD NUMBER"
+        android:textAlignment="center"
+        android:textColor="#D7D4D4"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/confirmButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <Button
+        android:id="@+id/confirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="88dp"
+        android:text="Confirm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rfidInput" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

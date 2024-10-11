@@ -1,19 +1,18 @@
 package com.example.vendomedicine
 
 import android.Manifest
-import android.bluetooth.BluetoothProfile
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
-import android.bluetooth.BluetoothGattService
+import android.bluetooth.BluetoothProfile
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log // Import Log for debugging
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -114,23 +113,23 @@ class MainActivity : AppCompatActivity() {
         // Set up medication buttons with data sending
         ibuprofenButton.setOnClickListener {
             handleButtonClick(ibuprofenButton, "Ibuprofen", ibuprofenQuantityTextView)
-            sendDataToESP32("1")
+            //sendDataToESP32("1")
         }
         paracetamolButton.setOnClickListener {
             handleButtonClick(paracetamolButton, "Paracetamol", paracetamolQuantityTextView)
-            sendDataToESP32("2")
+            //sendDataToESP32("2")
         }
         loperamideButton.setOnClickListener {
             handleButtonClick(loperamideButton, "Loperamide", loperamideQuantityTextView)
-            sendDataToESP32("3")
+            //sendDataToESP32("3")
         }
         cetirizineButton.setOnClickListener {
             handleButtonClick(cetirizineButton, "Cetirizine", cetirizineQuantityTextView)
-            sendDataToESP32("4")
+            //sendDataToESP32("4")
         }
 
         // Check for Bluetooth permissions and connect to the device
-        checkBluetoothPermissions() // Ensure this is called here after definition
+        //checkBluetoothPermissions() // Ensure this is called here after definition
     }
 
     private fun setupRecyclerView() {
@@ -162,9 +161,7 @@ class MainActivity : AppCompatActivity() {
 
         button.postDelayed({
             button.setBackgroundColor(defaultButtonColor)
-        }, 100)
-
-        adapter.notifyDataSetChanged()
+        }, 1000)
     }
 
     private fun resetQuantities() {
@@ -184,12 +181,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showNoOrderNotification() {
-        Toast.makeText(this, "No orders selected!", Toast.LENGTH_SHORT).show()
+        AlertDialog.Builder(this)
+            .setTitle("No items selected")
+            .setMessage("Please select at least one item to proceed with your order.")
+            .setPositiveButton("OK", null)
+            .show()
     }
+
+}
 
  ///////////////////////////////////BLUETOOTH INITIALIZATION/////////////////////////////////////////////////////
 
-    private fun initializeBluetooth() {
+    /*private fun initializeBluetooth() {
         if (bluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth is not supported on this device", Toast.LENGTH_SHORT).show()
             return
@@ -282,3 +285,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+*/

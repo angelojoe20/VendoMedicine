@@ -80,7 +80,7 @@ class ProcessPayment : AppCompatActivity() {
         clearOrderHistory() // Call to your clearing method
 
         // Navigate back to activity_main.xml
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, SplashActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Clear the back stack
         startActivity(intent)
         finish() // Finish current activity
