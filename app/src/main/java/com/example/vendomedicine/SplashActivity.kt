@@ -13,7 +13,18 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var rfidInput: EditText
     private lateinit var confirmButton: Button
-    private val validRFIDs = listOf("0004278059", "0004713969", "0004300970", "0004709554", "0004726985")
+    private val validRFIDs = listOf(
+        "0004315586",
+        "0004713969",
+        "0004278059",
+        "0004300970",
+        "0004726985",
+        "0004709548",
+        "0004674353",
+        "0006127120",
+        "0006127120",
+        "0004666016",
+        "0004709554")
     private var scannedRFID: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
