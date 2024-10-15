@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.USB_PERMISSION"/> <!-- Permission for USB connections -->
     <uses-feature android:name="android.hardware.usb.host"/> <!-- Ensure the device supports USB host mode -->
 
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -22,6 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VendoMedicine"
         tools:targetApi="31">
+        <service android:name=".BluetoothService" />
+
 
         <activity
             android:name=".SplashActivity"

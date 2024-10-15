@@ -4,19 +4,29 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class ProcessPayment : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var selectedItemsAdapter: SelectedItemsAdapter
-    private lateinit var selectedItems: List<SelectedItem>
+     lateinit var recyclerView: RecyclerView
+     lateinit var selectedItemsAdapter: SelectedItemsAdapter
+     lateinit var selectedItems: List<SelectedItem>
+
+    // Bluetooth variables
+     lateinit var bluetoothHandler: BluetoothHandler
+     lateinit var enableBluetoothLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.process_payment)
+
+        // Initialize Bluetooth
+        initBluetooth()
 
         // Retrieve data from Intent
         selectedItems = intent.getParcelableArrayListExtra<SelectedItem>("SELECTED_ITEMS") ?: emptyList()
@@ -41,18 +51,49 @@ class ProcessPayment : AppCompatActivity() {
         // Payment button functionality
         val paymentButton: Button = findViewById(R.id.button4)
         paymentButton.setOnClickListener {
-            showReceiptDialog()
+            if (bluetoothHandler.isBluetoothConnected) {
+                sendMedicineData() // Send data when Bluetooth is connected
+                showReceiptDialog()
+            } else {
+                bluetoothHandler.showBluetoothConnectionPrompt() // Show connection prompt
+            }
         }
     }
 
-    private fun setupRecyclerView(recyclerView: RecyclerView, selectedItems: List<SelectedItem>) {
+     fun initBluetooth() {
+        enableBluetoothLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                bluetoothHandler.initializeBluetooth()
+            } else {
+                Toast.makeText(this, "Bluetooth permission required to proceed", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Initialize Bluetooth handler
+        bluetoothHandler = BluetoothHandler(this, enableBluetoothLauncher)
+        bluetoothHandler.checkBluetoothPermissions()
+    }
+
+     fun setupRecyclerView(recyclerView: RecyclerView, selectedItems: List<SelectedItem>) {
         recyclerView.layoutManager = LinearLayoutManager(this)
         selectedItemsAdapter = SelectedItemsAdapter(selectedItems)
         recyclerView.adapter = selectedItemsAdapter
     }
 
+    // Function to send medicine data based on selected items
+     fun sendMedicineData() {
+        selectedItems.forEach { item ->
+            when (item.name) {
+                "Ibuprofen" -> bluetoothHandler.sendDataToESP32('1')
+                "Paracetamol" -> bluetoothHandler.sendDataToESP32('2')
+                "Loperamide" -> bluetoothHandler.sendDataToESP32('3')
+                "Cetirizine" -> bluetoothHandler.sendDataToESP32('4')
+            }
+        }
+    }
+
     // Function to show the dialog for receipt
-    private fun showReceiptDialog() {
+     fun showReceiptDialog() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Receipt")
         builder.setMessage("Do you want to receive a receipt for your purchase?")
@@ -75,8 +116,7 @@ class ProcessPayment : AppCompatActivity() {
     }
 
     // Function to clear order history and navigate back to main activity
-    private fun clearOrderHistoryAndNavigate() {
-        // Clear order history (you may want to use SharedPreferences or another method)
+     fun clearOrderHistoryAndNavigate() {
         clearOrderHistory() // Call to your clearing method
 
         // Navigate back to activity_main.xml
@@ -87,9 +127,7 @@ class ProcessPayment : AppCompatActivity() {
     }
 
     // Placeholder for clearing order history
-    private fun clearOrderHistory() {
-        // Implement your logic here to clear the order history
-        // For example, if you are using SharedPreferences:
+     fun clearOrderHistory() {
         val sharedPreferences = getSharedPreferences("VendoMed", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.remove("order_history") // Change this key to whatever you're using
@@ -97,7 +135,7 @@ class ProcessPayment : AppCompatActivity() {
     }
 
     // Function to display a notification (placeholder for actual notification logic)
-    private fun showNotification(title: String, message: String) {
+     fun showNotification(title: String, message: String) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title)
         builder.setMessage(message)

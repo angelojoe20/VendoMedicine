@@ -1,3 +1,5 @@
+// SPLASH
+
 package com.example.vendomedicine
 
 import android.content.Intent
@@ -5,6 +7,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 
@@ -24,6 +28,10 @@ class SplashActivity : AppCompatActivity() {
         "0004709554"
     )
     private var scannedRFID: String? = null
+
+    // Bluetooth handler instance
+    // private lateinit var bluetoothHandler: BluetoothHandler
+    // private lateinit var enableBluetoothLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +54,28 @@ class SplashActivity : AppCompatActivity() {
                 processRFID(inputRFID)
             }
         }
+
+        // Commenting out Bluetooth registration as it's no longer needed
+        // enableBluetoothLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        //     if (result.resultCode == RESULT_OK) {
+        //         bluetoothHandler.initializeBluetooth()
+        //     } else {
+        //         Toast.makeText(this, "Bluetooth permission required to proceed", Toast.LENGTH_SHORT).show()
+        //     }
+        // }
+
+        // Initialize Bluetooth handler
+        // bluetoothHandler = BluetoothHandler(this, enableBluetoothLauncher)
+        // bluetoothHandler.checkBluetoothPermissions()
+    }
+
+    private fun initializeRFIDReader() {
+        // Implement your RFID reader initialization logic here
+    }
+
+    private fun disableRFIDReader() {
+        // Implement logic to disable RFID reader
+        Log.d("SplashActivity", "RFID reader disabled.")
     }
 
     private fun processRFID(inputRFID: String) {
@@ -53,20 +83,27 @@ class SplashActivity : AppCompatActivity() {
 
         if (validRFIDs.contains(inputRFID)) {
             if (scannedRFID == null) {
-                scannedRFID = inputRFID
-                rfidInput.setText(scannedRFID)
+                scannedRFID = inputRFID // Save the scanned RFID to prevent rescan
+                Toast.makeText(this, "Access granted", Toast.LENGTH_SHORT).show()
+                disableRFIDReader() // Disable RFID reader
 
-                // Automatically proceed to MainActivity
-                Log.d("SplashActivity", "Proceeding to MainActivity...")
-                val intent = Intent(this, MainActivity::class.java)
+                // Proceed to MainActivity
+                val intent = Intent(this, MainActivity::class.java).apply {
+                    // Commenting out Bluetooth connection passing as it's no longer needed
+                    // putExtra("BLUETOOTH_CONNECTED", bluetoothHandler.isBluetoothConnected)
+                }
                 startActivity(intent)
-                finish()
+                finish() // Close SplashActivity
             } else {
-                Toast.makeText(this, "RFID already scanned: '$scannedRFID'.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "RFID already scanned", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Log.d("SplashActivity", "Invalid RFID detected: '$inputRFID'")
-            Toast.makeText(this, "Invalid RFID, try again", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Invalid RFID", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disableRFIDReader() // Ensure the RFID reader is disabled when the activity is destroyed
     }
 }
