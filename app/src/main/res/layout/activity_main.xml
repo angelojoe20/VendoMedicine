@@ -10,10 +10,11 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="75dp"
+        android:layout_width="75sp"
         android:layout_height="75dp"
+        android:scaleType="fitXY"
         tools:layout_editor_absoluteX="60dp"
-        tools:layout_editor_absoluteY="51dp"
+        tools:layout_editor_absoluteY="33dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -22,8 +23,108 @@
         android:layout_height="40dp"
         android:text="Welcome, User!"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="28sp"
         android:textStyle="bold"
         tools:layout_editor_absoluteX="155dp"
-        tools:layout_editor_absoluteY="73dp" />
+        tools:layout_editor_absoluteY="57dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#4D6466"
+        android:text="Button"
+        tools:layout_editor_absoluteX="93dp"
+        tools:layout_editor_absoluteY="800dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#1b7895"
+        android:text="Button"
+        tools:layout_editor_absoluteX="248dp"
+        tools:layout_editor_absoluteY="800dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        tools:layout_editor_absoluteX="60dp"
+        tools:layout_editor_absoluteY="136dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#FFFFFF"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/iprubofen"
+        tools:layout_editor_absoluteX="49dp"
+        tools:layout_editor_absoluteY="310dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ibuprofen"
+        tools:layout_editor_absoluteX="93dp"
+        tools:layout_editor_absoluteY="321dp" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="₱10.00"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="103dp"
+        tools:layout_editor_absoluteY="432dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#FFFFFF"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/cetirizine"
+        tools:layout_editor_absoluteX="248dp"
+        tools:layout_editor_absoluteY="310dp" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cetirizine"
+        tools:layout_editor_absoluteX="298dp"
+        tools:layout_editor_absoluteY="321dp" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="₱18.00"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="306dp"
+        tools:layout_editor_absoluteY="432dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#FFFFFF"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/paracetamol"
+        tools:layout_editor_absoluteX="49dp"
+        tools:layout_editor_absoluteY="501dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:backgroundTint="#F6F6F6"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/loperamide"
+        tools:layout_editor_absoluteX="248dp"
+        tools:layout_editor_absoluteY="501dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
