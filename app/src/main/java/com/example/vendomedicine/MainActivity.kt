@@ -1,6 +1,9 @@
 package com.example.vendomedicine
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
@@ -11,6 +14,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -45,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     // Bluetooth handler
     private lateinit var bluetoothHandler: BluetoothHandler
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -52,16 +58,13 @@ class MainActivity : AppCompatActivity() {
         // Initialize BluetoothHandler
         enableBluetoothLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                // Bluetooth has been enabled
                 bluetoothHandler.showBluetoothConnectionPrompt()
             } else {
-                // User declined to enable Bluetooth
                 Toast.makeText(this, "Bluetooth not enabled", Toast.LENGTH_SHORT).show()
             }
         }
 
-        bluetoothHandler = BluetoothHandler(this, enableBluetoothLauncher)
-        bluetoothHandler.checkBluetoothPermissions()
+        checkBluetoothPermissions()
 
         // Initialize buttons
         val cancelButton: Button = findViewById(R.id.button)
@@ -124,6 +127,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkBluetoothPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_CONNECT), 1)
+        } else {
+            initializeBluetoothHandler()
+        }
+    }
+
+    private fun initializeBluetoothHandler() {
+        bluetoothHandler = BluetoothHandler(this, enableBluetoothLauncher)
+        bluetoothHandler.checkBluetoothPermissions()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                initializeBluetoothHandler()
+            } else {
+                Toast.makeText(this, "Bluetooth permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun setupRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = SelectedItemsAdapter(selectedItems)
@@ -147,7 +174,7 @@ class MainActivity : AppCompatActivity() {
         when (itemName) {
             "Ibuprofen" -> imageView.setImageResource(R.drawable.iprubofen)
             "Paracetamol" -> imageView.setImageResource(R.drawable.paracetamol)
-            "Loperamide" -> imageView.setImageResource(R.drawable.loperamide)
+            "Loperamide" -> imageView.setImaHgeResource(R.drawable.loperamide)
             "Cetirizine" -> imageView.setImageResource(R.drawable.cetirizine)
         }
 
