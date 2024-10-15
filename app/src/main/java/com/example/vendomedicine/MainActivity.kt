@@ -66,12 +66,10 @@ class MainActivity : AppCompatActivity() {
         // Initialize buttons
         val cancelButton: Button = findViewById(R.id.button)
         val proceedButton: Button = findViewById(R.id.button2)
-        ibuprofenButton = findViewById(R.id.button5)
-        paracetamolButton = findViewById(R.id.button8)
-        loperamideButton = findViewById(R.id.button7)
-        cetirizineButton = findViewById(R.id.button6)
-
-        imageView = findViewById(R.id.imageView)
+        ibuprofenButton = findViewById(R.id.imageButton)
+        paracetamolButton = findViewById(R.id.imageButton2)
+        loperamideButton = findViewById(R.id.imageButton3)
+        cetirizineButton = findViewById(R.id.imageButton4)
 
         // Initialize quantity TextViews
         ibuprofenQuantityTextView = findViewById(R.id.quantityTextView1)
