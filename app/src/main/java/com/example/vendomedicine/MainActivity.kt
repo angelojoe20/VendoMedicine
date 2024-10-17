@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity() {
         when (itemName) {
             "Ibuprofen" -> imageView.setImageResource(R.drawable.iprubofen)
             "Paracetamol" -> imageView.setImageResource(R.drawable.paracetamol)
-            "Loperamide" -> imageView.setImaHgeResource(R.drawable.loperamide)
+            "Loperamide" -> imageView.setImageResource(R.drawable.loperamide)
             "Cetirizine" -> imageView.setImageResource(R.drawable.cetirizine)
         }
 
